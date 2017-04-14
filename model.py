@@ -1,16 +1,16 @@
 import web
 
-db = web.database(dbn='sqlite', host='localhost', db='farming')
+db = web.database(dbn='sqlite', host='localhost', db='pivotmanager')
 
 def storeMoistureData(stkData, sampleTime):
-    db.insert("datalogs", dataType="moisture", dataObj=stkData, sampleTime=sampleTime)
+    db.insert("dataLogs", dataType="moisture", dataObj=stkData, dateTime=sampleTime)
     
 def getMoistureUploadData():
-    return db.select("datalogs", where="uploded = 0 AND dataType='moisture'")
+    return db.select("dataLogs", where="uploded = 0 AND dataType='moisture'")
         
 def storeWeatherData(sData):
-    db.insert("datalogs", dataType="weather", dataObj=sData)
+    db.insert("dataLogs", dataType="weather", dataObj=sData)
     
 def getWeatherUploadData():
-    return db.select("datalogs", where="uploded = 0 AND dataType='weather'")
+    return db.select("dataLogs", where="uploded = 0 AND dataType='weather'")
     

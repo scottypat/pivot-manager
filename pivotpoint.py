@@ -1,10 +1,6 @@
-import logging
-import argparse
-import sys
-import time
-import model
-import weather
-import moisture
+import logging, argparse, sys
+import datetime, threading, time
+import model, weather, moisture
 
 # Defaults
 LOG_FILENAME = "/var/log/farming/pivotpoint.log"
@@ -50,35 +46,34 @@ sys.stdout = MyLogger(logger, logging.INFO)
 # Replace stderr with logging to file at ERROR level
 sys.stderr = MyLogger(logger, logging.ERROR)
 
-#Collection Rate in Minutes
-iMoistureCollectionRate = 60
-iWeatherCollectionRate = 10
-iLoopCounter = 0
-
 #Setup LORA Radio
 loraId = moisture.setupLora()
 
-# Loop forever
-while True:
-        #logger.info("The counter is now ")
+nextCall = time.time()
+
+def RunServices():
+    global nextCall
+  
+    #Get, Store Weather Data                        
+    #sWeatherData = weather.getData("192.168.1.141", "/FullDataString")
+    #model.storeWeatherData(sWeatherData)
+  
+    #Get, Store Moisture Data
+    sampleTime = datetime.datetime.now().strftime('%Y/%m/%d %H:%M:%S')
+    stkMoistureData = moisture.getData(loraId)
+    for strMoistureData in stkMoistureData:
+        model.storeMoistureData(strMoistureData, sampleTime)
         
-        #Get, Store Weather Data                        
-        sWeatherData = weather.getData("192.168.1.141", "/FullDataString")
-        model.storeWeatherData(sWeatherData)   
-                      
-        #Get, Store Moisture Data
-        stkMoistureData = moisture.getData(loraId)        
-        for strMoistureData in stkMoistureData:
-            model.storeMoistureData(strMoistureData)        
-        
-        #Upload Weather Data to FarmingApp
-        oWeatherData = model.getWeatherUploadData()
-        weather.postData(oWeatherData, "farming")
-        
-        #Upload Moisture Data to FarmingApp
-        oMoistureData = model.getMoistureUploadData()
-        moisture.postData(oMoistureData, "farming")
-        
-        iLoopCounter += iLoopCounter        
-        time.sleep(600)
-        
+   
+    #Upload Weather Data to FarmingApp
+    #oWeatherData = model.getWeatherUploadData()
+    #weather.postData(oWeatherData, "farming")
+    
+    #Upload Moisture Data to FarmingApp
+    #oMoistureData = model.getMoistureUploadData()
+    #moisture.postData(oMoistureData, "farming")
+   
+    nextCall = nextCall + 60
+    threading.Timer(nextCall - time.time(), RunServices).start()
+
+RunServices()

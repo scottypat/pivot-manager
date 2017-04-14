@@ -1,11 +1,10 @@
 import sqlite3
-conn = sqlite3.connect('farming.db')
+conn = sqlite3.connect("pivotmanager.db")
 
 c = conn.cursor()
 
 # Create table
-c.execute('''CREATE TABLE stocks
-             (date text, trans text, symbol text, qty real, price real)''')
+c.execute("CREATE TABLE dataLogs (idDataLogs INTEGER PRIMARY KEY, sensorId INTEGER, dataType TEXT, dataObj TEXT, dateTime TEXT)")
 
 # Save (commit) the changes
 conn.commit()
