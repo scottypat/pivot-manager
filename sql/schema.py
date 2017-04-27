@@ -10,7 +10,7 @@ c.execute("CREATE TABLE moisture (idMoisture INTEGER PRIMARY KEY, sensorId TEXT,
 c.execute("INSERT INTO moisture (sensorId, depth1, depth2, depth3, depth4, vSys, soilTemp, dataObj, dateTime) VALUES ('0', null, null, null, null, null, null, null, null)")
 
 c.execute("CREATE TABLE weather (idWeather INTEGER PRIMARY KEY, sensorId TEXT, dataObj TEXT, dateTime TEXT)")
-c.execute("INSERT INTO weather (sensorId, dataObj, dateTime) VALUES ('0', null, null, null)")
+c.execute("INSERT INTO weather (sensorId, dataObj, dateTime) VALUES ('0', null, null)")
 
 # Save (commit) the changes
 conn.commit()
