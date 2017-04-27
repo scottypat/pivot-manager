@@ -1,10 +1,11 @@
-import logging, argparse, sys
+import logging, argparse, sys, logging.handlers
 import datetime, threading, time
 import model, weather, moisture
 
 # Defaults
 LOG_FILENAME = "/var/log/farming/pivotpoint.log"
 LOG_LEVEL = logging.INFO  # Could be e.g. "DEBUG" or "WARNING"
+loggerId = "Red Barn"
 
 # Define and parse command line arguments
 parser = argparse.ArgumentParser(description="My simple Python service")
@@ -60,10 +61,9 @@ def RunServices():
   
     #Get, Store Moisture Data
     sampleTime = datetime.datetime.now().strftime('%Y/%m/%d %H:%M:%S')
-    stkMoistureData = moisture.getData(loraId)
+    stkMoistureData = moisture.getData(loraId, loggerId)
     for strMoistureData in stkMoistureData:
-        model.storeMoistureData(strMoistureData, sampleTime)
-        
+        model.storeMoistureData(strMoistureData, sampleTime)        
    
     #Upload Weather Data to FarmingApp
     #oWeatherData = model.getWeatherUploadData()
