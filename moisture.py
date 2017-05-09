@@ -2,6 +2,7 @@ import wiringpi
 import httplib
 import json
 import string
+import sys
 
 def setupLora():
     wiringpi.wiringPiSetup()
@@ -25,13 +26,17 @@ def getData(loraId, loggerId):
         
         if strDataChar == "!" and bMoistureData == True:
             # Trim start and end characters, and load json data
-            strMoistureData = strMoistureData[2:-2]            
-            jsonData = json.loads(strMoistureData)
+            strMoistureData = strMoistureData[2:-2]
+            try:            
+                jsonData = json.loads(strMoistureData)
             
-            #Check if data is intended for this data logger            
-            if jsonData["loggerId"] == loggerId:   
-                stackMoistureData.append(strMoistureData)                       
-            
+                #Check if data is intended for this data logger            
+                if jsonData["loggerId"] == loggerId:   
+                    stackMoistureData.append(strMoistureData)
+            except:                       
+                e = sys.exc_info()[0]
+                write_to_page( "<p>Error: %s</p>" % e )
+                
             bMoistureData = False                
             strMoistureData = ""
             
