@@ -33,9 +33,9 @@ def getData(loraId, loggerId):
                 #Check if data is intended for this data logger            
                 if jsonData["loggerId"] == loggerId:   
                     stackMoistureData.append(strMoistureData)
-            except ValueError, e:                       
-                print "Error: " + e
+            except ValueError, e:
                 print "Unable to load jsonData: " + strMoistureData
+                print e
                 
             bMoistureData = False                
             strMoistureData = ""
