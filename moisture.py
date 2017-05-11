@@ -33,13 +33,15 @@ def getData(loraId, loggerId):
                 #Check if data is intended for this data logger            
                 if jsonData["loggerId"] == loggerId:   
                     stackMoistureData.append(strMoistureData)
-            except:                       
-                e = sys.exc_info()[0]
-                write_to_page( "<p>Error: %s</p>" % e )
+            except ValueError, e:                       
+                print "Error: " + e
+                print "Unable to load jsonData: " + strMoistureData
                 
             bMoistureData = False                
             strMoistureData = ""
-            
+     
+    bMoistureData = False                
+    strMoistureData = ""       
     return stackMoistureData
 
 def postData(stackMoistureData, farmingServer):
