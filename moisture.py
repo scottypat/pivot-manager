@@ -7,8 +7,8 @@ import sys
 def setupLora():
     wiringpi.wiringPiSetup()
     loraId = wiringpi.serialOpen("/dev/serial0",9600)
-    wiringpi.pinmode(4, OUTPUT) # P1 Pin
-    wiringpi.pinmode(5, OUTPUT) # P2 Pin
+    wiringpi.pinMode(4, OUTPUT) # P1 Pin
+    wiringpi.pinMode(5, OUTPUT) # P2 Pin
     wiringpi.digitalWrite(4, HIGH) 
     wiringpi.digitalWrite(5, LOW)
     return  loraId
