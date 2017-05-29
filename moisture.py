@@ -32,14 +32,13 @@ def getData(loraId, loggerId):
             # Trim start and end characters, and load json data
             strMoistureData = strMoistureData[2:-2]
             try:            
-                jsonData = json.loads(strMoistureData)           
+                jsonData = json.loads(strMoistureData)
+                #Check if data is intended for this data logger            
+                if jsonData["loggerId"] == loggerId:   
+                    stackMoistureData.append(strMoistureData)           
                 
             except ValueError, e:
-                print "Unable to load jsonData: " + strMoistureData                
-            
-            #Check if data is intended for this data logger            
-            if jsonData["loggerId"] == loggerId:   
-                stackMoistureData.append(strMoistureData)
+                print "Unable to load jsonData: " + strMoistureData 
             
             bMoistureData = False                
             strMoistureData = ""     
