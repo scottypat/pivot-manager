@@ -25,7 +25,7 @@ def main():
     conn = create_connection(database)
     with conn:
         print("Query all moisture data:")
-        select_all_tasks(conn, "moisture) 
+        select_all(conn, "moisture) 
  
 if __name__ == '__main__':
     main()
