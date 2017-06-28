@@ -61,9 +61,11 @@ def RunServices():
   
     #Get, Store Moisture Data
     sampleTime = datetime.datetime.now().strftime('%Y/%m/%d %H:%M:%S')
-    stkMoistureData = moisture.getData(loraId, loggerId)
-    for strMoistureData in stkMoistureData:
-        model.storeMoistureData(strMoistureData, sampleTime)        
+    lstMoistureData = moisture.getData(loraId, loggerId)
+    #for strMoistureData in stkMoistureData:
+        #model.storeMoistureData(strMoistureData, sampleTime)    
+    
+    model.storeMoistureData(lstMoistureData, sampleTime)
    
     #Upload Weather Data to FarmingApp
     #oWeatherData = model.getWeatherUploadData()
