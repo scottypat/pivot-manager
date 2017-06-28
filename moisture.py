@@ -14,7 +14,7 @@ def setupLora():
     return  loraId
 
 def getData(loraId, loggerId):
-    stackMoistureData = []
+    lstMoistureData = []
     bMoistureData = False
     
     while wiringpi.serialDataAvail(loraId) > 0:
@@ -31,27 +31,69 @@ def getData(loraId, loggerId):
         if strDataChar == "!" and bMoistureData == True:
             # Trim start and end characters, and load json data
             strMoistureData = strMoistureData[2:-2]
-            try:            
-                jsonData = json.loads(strMoistureData)
+            try:
+                jsonData = buildJson(strMoistureData)                
                 #Check if data is intended for this data logger            
                 if jsonData["loggerId"] == loggerId:   
-                    stackMoistureData.append(strMoistureData)           
+                    lstMoistureData.append(strMoistureData)           
                 
             except ValueError, e:
-                print "Unable to load jsonData: " + strMoistureData 
+                print "Unable to load weather data: " + strMoistureData 
             
             bMoistureData = False                
             strMoistureData = ""     
            
-    return stackMoistureData
+    return lstMoistureData
 
-def postData(stackMoistureData, farmingServer):
+def postData(lstMoistureData, farmingServer):
     headers = ""
     conn = httplib.HTTPConnection(farmingServer)
-    conn.request("POST", "/moisture", stackMoistureData, headers)
+    conn.request("POST", "/moisture", lstMoistureData, headers)
     response = conn.getresponse()
     
     if response.status == "200":
             content = response.read()        
             data = json.loads(content)
             return data
+        
+def buildJson(strMoistureData):
+    arrayPosition = 0
+    dbStructure = {}
+    dataStructure = {
+        0: 'sensorId',
+        1: 'loggerId',
+        2: 'depth1',
+        3: 'depth2',
+        4: 'depth3',
+        5: 'depth4',
+        6: 'vSys',
+        7: 'soilTemp'}    
+    
+    splitMoistureData = strMoistureData.split(",")
+    
+    jsonWeatherData = "{"
+    
+    for moistureData in splitMoistureData:
+        if arrayPosition in dataStructure.keys():
+            jsonWeatherData = jsonWeatherData + "\"" + dataStructure[arrayPosition] + "\""
+            jsonWeatherData = jsonWeatherData + ":"
+            if dataStructure[arrayPosition] == "sensoId" or dataStructure[arrayPosition] == "loggerId":
+                jsonWeatherData = jsonWeatherData + "\"" + moistureData + "\""
+            else:
+                jsonWeatherData = jsonWeatherData + moistureData
+            jsonWeatherData = jsonWeatherData + "," 
+                       
+        array_position += 1
+    
+    #Remove final comma     
+    jsonWeatherData = jsonWeatherData[0:-1]
+    
+    jsonWeatherData = jsonWeatherData + "}"
+    
+    return jsonWeatherData
+    
+    
+    
+    
+    
+        
