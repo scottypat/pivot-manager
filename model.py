@@ -7,7 +7,7 @@ db = web.database(dbn='sqlite', db='pivotmanager.db')
 def storeMoistureData(lstData, sampleTime):
     dbValues = []    
     
-    for strMoistureData in stkMoistureData:
+    for strMoistureData in lstData:
         jsonData = json.loads(strMoistureData)
         
         #Add date/time stamp, and copy of data string
