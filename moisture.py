@@ -40,6 +40,7 @@ def getData(loraId, loggerId):
                 
             except ValueError, e:
                 print "Unable to load weather data: " + strMoistureData 
+                print e
             
             bMoistureData = False                
             strMoistureData = ""     
@@ -78,7 +79,7 @@ def buildJson(strMoistureData):
         if arrayPosition in dataStructure.keys():
             jsonWeatherData = jsonWeatherData + "\"" + dataStructure[arrayPosition] + "\""
             jsonWeatherData = jsonWeatherData + ":"
-            if dataStructure[arrayPosition] == "sensoId" or dataStructure[arrayPosition] == "loggerId":
+            if dataStructure[arrayPosition] == "sensorId" or dataStructure[arrayPosition] == "loggerId":
                 jsonWeatherData = jsonWeatherData + "\"" + moistureData + "\""
             else:
                 jsonWeatherData = jsonWeatherData + moistureData
