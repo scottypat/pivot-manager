@@ -32,10 +32,11 @@ def getData(loraId, loggerId):
             # Trim start and end characters, and load json data
             strMoistureData = strMoistureData[2:-2]
             try:
-                jsonData = buildJson(strMoistureData)                
+                jsonData = buildJson(strMoistureData)
+                dictData = json.loads(jsonData)                
                 #Check if data is intended for this data logger            
-                if jsonData["loggerId"] == loggerId:   
-                    lstMoistureData.append(strMoistureData)           
+                if dictData["loggerId"] == loggerId:   
+                    lstMoistureData.append(jsonData)           
                 
             except ValueError, e:
                 print "Unable to load weather data: " + strMoistureData 
@@ -83,7 +84,7 @@ def buildJson(strMoistureData):
                 jsonWeatherData = jsonWeatherData + moistureData
             jsonWeatherData = jsonWeatherData + "," 
                        
-        array_position += 1
+        arrayPosition += 1
     
     #Remove final comma     
     jsonWeatherData = jsonWeatherData[0:-1]

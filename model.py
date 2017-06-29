@@ -12,16 +12,17 @@ def storeMoistureData(lstData, sampleTime):
         
         #Add date/time stamp, and copy of data string
         jsonData["dateTime"] = sampleTime
-        jsonData["dataObj"] = jsonData
+        sData = str(jsonData)
+        jsonData["dataObj"] = sData
+        jsonData.pop("loggerId", None)
         
         dbValues.append(jsonData)
     
-    try:
-        #db.insert("moisture", sensorId=jsonData["sensorId"], depth1=jsonData["depth1"], depth2=jsonData["depth2"], depth3=jsonData["depth3"], depth4=jsonData["depth4"], vSys=jsonData["vSys"], soilTemp=jsonData["soilTemp"], dataObj=strData, dateTime=sampleTime)
+    try:        
         db.multiple_insert("moisture", values=dbValues)
     
     except:
-        error = "Error Inserting Moisture Data: " + dbValues
+        error = "Error Inserting Moisture Data"
         print error
     
 def getMoistureUploadData():
