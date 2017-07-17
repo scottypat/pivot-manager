@@ -28,11 +28,11 @@ def storeMoistureData(lstData, sampleTime):
 def getMoistureUploadData():
     return db.select("dataLogs", where="uploded = 0 AND dataType='moisture'")
 
-def getMoistureLabels(weekDelta):
+def getMoistureData(weekDelta):
     queryDate = datetime.datetime.now() - datetime.timedelta(weeks=weekDelta)
-    queryDate = queryDate.strftime('%Y/%m/%d %H:%M:%S')    
-    #return db.select("moisture", what='dateTime', order='dateTime')
-    return db.select("moisture", queryDate, what='dateTime', order='dateTime', where='dateTime > 2017/04/05 01:12:35')    
+    queryDate = queryDate.strftime('%Y/%m/%d %H:%M:%S')   
+    queryDate = dict(qDate=queryDate)    
+    return db.query("SELECT sensorId, depth1, depth2, depth3, depth4, soilTemp, dateTime FROM moisture WHERE dateTime > $qDate", queryDate)   
         
 def storeWeatherData(sData):
     db.insert("dataLogs", dataType="weather", dataObj=sData)
@@ -40,3 +40,18 @@ def storeWeatherData(sData):
 def getWeatherUploadData():
     return db.select("dataLogs", where="uploded = 0 AND dataType='weather'")
     
+def orgMoistureData(moistureData):
+    chartData = {}
+    chartData["depth1"] = []
+    chartData["depth2"] = []
+    chartData["depth3"] = []
+    chartData["depth4"] = []
+    for dataSample in moistureData:
+        singleSample = dict(dataSample)       
+        chartData["depth1"].append("{x: \"" + singleSample["dateTime"] + "\", y: " +  str(singleSample["depth1"]) + "}")        
+        chartData["depth2"].append("{x: \"" + singleSample["dateTime"] + "\", y: " +  str(singleSample["depth2"]) + "}")
+        chartData["depth3"].append("{x: \"" + singleSample["dateTime"] + "\", y: " +  str(singleSample["depth3"]) + "}")
+        chartData["depth4"].append("{x: \"" + singleSample["dateTime"] + "\", y: " +  str(singleSample["depth4"]) + "}")
+    
+    return chartData
+        
