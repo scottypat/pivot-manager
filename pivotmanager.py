@@ -5,7 +5,7 @@ import model, weather, moisture
 # Defaults
 LOG_FILENAME = "/var/log/farming/pivotpoint.log"
 LOG_LEVEL = logging.INFO  # Could be e.g. "DEBUG" or "WARNING"
-loggerId = "Red Barn"
+loggerId = "Linear"
 
 # Define and parse command line arguments
 parser = argparse.ArgumentParser(description="My simple Python service")
