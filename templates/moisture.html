@@ -70,7 +70,7 @@ $var title: Moisture - Field Manager
                         data: 
                             [ 
                                 $for item in moistureData["depth1"]:
-                                    $:item[:31]25},
+                                    $:item[:30]-25},
                             ]
                     }
                 ],
@@ -128,7 +128,7 @@ $var title: Moisture - Field Manager
                     data: 
                         [ 
                             $for item in moistureData["depth2"]:
-                                $:item[:31]25},
+                                $:item[:30]-25},
                         ]
                 }
                 ],
