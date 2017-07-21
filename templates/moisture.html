@@ -119,7 +119,19 @@ $var title: Moisture - Field Manager
                             $for item in moistureData["depth2"]:
                                 $:item,
                     ]                                  
-                }],
+                },
+                {
+                    label: "Irrigate",
+                    backgroundColor: color(window.chartColors.yellow).alpha(0.5).rgbString(),
+                    borderColor: window.chartColors.yellow,
+                    fill: "bottom",
+                    data: 
+                        [ 
+                            $for item in moistureData["depth2"]:
+                                $:item[:31]25},
+                        ]
+                }
+                ],
             },
             options: {
                 responsive: true,
