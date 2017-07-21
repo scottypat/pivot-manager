@@ -1,2 +1,163 @@
-<script src="~/node_modules/chart.js/dist/Chart.js"></script>
+$def with (moistureData)
 
+$var title: Moisture - Field Manager
+
+<script src="static/moment.js"></script>
+<script src="static/Chart.js"></script>
+<script src="static/utils.js"></script>
+
+   
+    <div class="row column text-center">
+        <h4>Moisture Data</h4>        
+        <a href="moisture?weekDelta=4" class="button">1 Month</a>
+        <a href="moisture?weekDelta=12" class="button">3 Months</a>
+        <a href="moisture?weekDelta=52" class="button">12 Months</a>
+        <hr>
+    </div>
+    <div class="row small-up-2 large-up-2">
+        <h5>Irrigation Start</h5>
+        <div class="column">
+            <canvas id="start_depth1"></canvas>            
+        </div>
+        <div class="column">
+            <canvas id="start_depth2"></canvas>
+        </div>
+        <h5>Irrigation End</h5>
+        <div class="column">
+                     
+        </div>
+        <div class="column">
+                      
+        </div>
+        <h5>Light Soil</h5>
+        <div class="column">
+                     
+        </div>
+        <div class="column">
+                      
+        </div>
+        <h5>Dark Soil</h5>
+        <div class="column">
+                      
+        </div>
+        <div class="column">
+                      
+        </div>
+    </div>    
+    
+    <script>
+        var color = Chart.helpers.color;
+        var start_depth1_config = {
+            type: 'line',
+            data: {
+                datasets: [
+                    {
+                        label: "Moisture",
+                        backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
+                        borderColor: window.chartColors.blue,
+                        fill: false,
+                        data: 
+                            [ 
+                                $for item in moistureData["depth1"]:
+                                    $:item,
+                            ]
+                    },
+                    {
+                        label: "Irrigate",
+                        backgroundColor: color(window.chartColors.yellow).alpha(0.5).rgbString(),
+                        borderColor: window.chartColors.yellow,
+                        fill: "bottom",
+                        data: 
+                            [ 
+                                $for item in moistureData["depth1"]:
+                                    $:item[:31]25},
+                            ]
+                    }
+                ],
+            },
+            options: {
+                responsive: true,
+                title:{
+                    display:true,
+                    text:"10\""
+                },
+                scales: {
+                    xAxes: [{
+                        type: "time",
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Date'
+                        },
+                        ticks: {
+                            major: {
+                                fontStyle: "bold",
+                                fontColor: "#FF0000"
+                            }
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'kPa'
+                        }
+                    }]
+                }
+            }
+        };
+        
+        var start_depth2_config = {
+            type: 'line',
+            data: {
+                datasets: [{
+                    label: "Moisture",
+                    backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
+                    borderColor: window.chartColors.blue,
+                    fill: false,
+                    data: [ 
+                            $for item in moistureData["depth2"]:
+                                $:item,
+                    ]                                  
+                }],
+            },
+            options: {
+                responsive: true,
+                title:{
+                    display:true,
+                    text:"18\""
+                },
+                scales: {
+                    xAxes: [{
+                        type: "time",
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Date'
+                        },
+                        ticks: {
+                            major: {
+                                fontStyle: "bold",
+                                fontColor: "#FF0000"
+                            }
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'kPa'
+                        }
+                    }]
+                }
+            }
+        };
+
+        window.onload = function() {
+            var start_depth1_ctx = document.getElementById("start_depth1").getContext("2d");
+            var start_depth2_ctx = document.getElementById("start_depth2").getContext("2d");
+            window.myLine = new Chart(start_depth1_ctx, start_depth1_config);
+            window.myLine = new Chart(start_depth2_ctx, start_depth2_config);
+        };        
+    </script>
+    
